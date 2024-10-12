@@ -5,6 +5,10 @@ import json
 import threading
 import os
 from dotenv import load_dotenv
+import logging
+
+logging.basicConfig(filename='restock_monitoring.log', level=logging.INFO)
+logging.info("재고 모니터링 시작")
 
 load_dotenv()
 
@@ -78,6 +82,7 @@ def check_stock2():
 
 def monitor_stock1():
     while True:
+        logging.info("화이트워시 재고 확인 중")
         in_stock = check_stock()
         if in_stock:
             send_slack_message("화이트워시(S) 재고가 다시 들어왔습니다!")
@@ -88,6 +93,7 @@ def monitor_stock1():
 
 def monitor_stock2():
     while True:
+        logging.info("뉴본 재고 확인중")
         in_stock = check_stock2()
         if in_stock:
             send_slack_message("뉴본 신생아 세트 재고가 다시 들어왔습니다!")
