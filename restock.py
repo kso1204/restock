@@ -7,7 +7,10 @@ import os
 from dotenv import load_dotenv
 import logging
 
-logging.basicConfig(filename='restock_monitoring.log', level=logging.INFO)
+logging.basicConfig(filename='restock_monitoring.log',
+                    level=logging.INFO,
+                    format='%(asctime)s - %(message)s', 
+                    datefmt='%Y-%m-%d %H:%M:%S')
 logging.info("재고 모니터링 시작")
 
 load_dotenv()
