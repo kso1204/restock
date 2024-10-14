@@ -10,9 +10,7 @@ import logging
 logging.basicConfig(filename='restock_monitoring.log',
                     level=logging.INFO,
                     format='%(asctime)s - %(message)s', 
-                    datefmt='%Y-%m-%d %H:%M:%S',
-                    encoding="utf-8"
-                    )
+                    datefmt='%Y-%m-%d %H:%M:%S')
 logging.info("재고 모니터링 시작")
 
 load_dotenv()
@@ -23,6 +21,10 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 # Webhook URL을 여기에 입력합니다.
 webhook_url = os.getenv('SLACK_WEBHOOK_URL')
+
+last_slack_time1 = 0
+last_slack_time2 = 0
+last_slack_time3 = 0
 
 # 슬랙 메시지 전송 함수 (Slack Webhook URL필요)
 def send_slack_message(message):
@@ -135,50 +137,57 @@ def check_stock3():
     return False  # 품절 상태
 
 def monitor_stock1():
+    global last_slack_time1
     while True:
         logging.info("화이트워시 재고 확인 중")
         in_stock = check_stock()
+        current_time = time.time()  # 현재 시간 가져오기
+
         if in_stock:
             send_slack_message("화이트워시(S) 재고가 다시 들어왔습니다!")
             break  # 조건에 맞으면 루프 종료
         else:
             print("화이트워시(S) 재고 없음, 다시 확인 중...")
+            # 3시간(10800초)마다 슬랙 메시지 전송
+            if current_time - last_slack_time1 >= 10800:
+                send_slack_message("화이트워시(S) 모니터링 중입니다. 아직 재고가 없습니다.")
+                last_slack_time1 = current_time  # 마지막 메시지 보낸 시간 업데이트
         time.sleep(60)  # 60초 후 다시 확인
 
-        # 3시간마다 슬랙 메시지 전송
-        send_slack_message("화이트워시(S) 모니터링 중입니다. 아직 재고가 없습니다.")
-        time.sleep(10800)  # 3시간 대기
-
 def monitor_stock2():
+    global last_slack_time2
     while True:
         logging.info("뉴본 재고 확인중")
         in_stock = check_stock2()
+        current_time = time.time()  # 현재 시간 가져오기
         if in_stock:
             send_slack_message("뉴본 신생아 세트 재고가 다시 들어왔습니다!")
             break  # 조건에 맞으면 루프 종료
         else:
             print("뉴본 신생아 세트 재고 없음, 다시 확인 중...")
+            if current_time - last_slack_time2 >= 10800:
+                send_slack_message("뉴본 신생아 세트 모니터링 중입니다. 아직 재고가 없습니다.")
+                last_slack_time2 = current_time  # 마지막 메시지 보낸 시간 업데이트
         time.sleep(60)  # 60초 후 다시 확인
-        
-        # 3시간마다 슬랙 메시지 전송
-        send_slack_message("뉴본 신생아 세트 모니터링 중입니다. 아직 재고가 없습니다.")
-        time.sleep(10800)  # 3시간 대기
 
 
 def monitor_stock3():
+    global last_slack_time3
     while True:
         logging.info("트립트랩 베이비세트 확인중")
         in_stock = check_stock3()
+        current_time = time.time()  # 현재 시간 가져오기
+
         if in_stock:
             send_slack_message("트립트랩 베이비세트 재고가 다시 들어왔습니다!")
             break  # 조건에 맞으면 루프 종료
         else:
             print("트립트랩 베이비세트 세트 재고 없음, 다시 확인 중...")
+            # 3시간(10800초)마다 슬랙 메시지 전송
+            if current_time - last_slack_time3 >= 10800:
+                send_slack_message("트립트랩 베이비세트 모니터링 중입니다. 아직 재고가 없습니다.")
+                last_slack_time3 = current_time  # 마지막 메시지 보낸 시간 업데이트
         time.sleep(60)  # 60초 후 다시 확인
-        
-        # 3시간마다 슬랙 메시지 전송
-        send_slack_message("트립트랩 베이비세트 모니터링 중입니다. 아직 재고가 없습니다.")
-        time.sleep(10800)  # 3시간 대기
 
 # 실행
 if __name__ == '__main__':
