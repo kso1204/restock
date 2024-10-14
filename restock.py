@@ -23,10 +23,6 @@ load_dotenv()
 # Webhook URL을 여기에 입력합니다.
 webhook_url = os.getenv('SLACK_WEBHOOK_URL')
 
-last_slack_time1 = 0
-last_slack_time2 = 0
-last_slack_time3 = 0
-
 # 슬랙 메시지 전송 함수 (Slack Webhook URL필요)
 
 class StockMonitor:
