@@ -78,7 +78,7 @@ class StockMonitor:
                 break
             else:
                 logging.info(f"{self.option_text} 재고 없음, 다시 확인 중...")
-                if current_time - self.last_slack_time >= 10800:
+                if current_time - self.last_slack_time >= 1080000:
                     self.send_slack_message(f"{self.option_text} 모니터링 중입니다. 아직 재고가 없습니다.")
                     self.last_slack_time = current_time
             time.sleep(60)
