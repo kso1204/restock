@@ -75,7 +75,8 @@ class StockMonitor:
             current_time = time.time()
             if in_stock:
                 self.send_slack_message(f"{self.option_text} 재고가 다시 들어왔습니다!")
-                break
+                #재고 들어왔을 때 1분마다 계속 알림
+                #break
             else:
                 logging.info(f"{self.option_text} 재고 없음, 다시 확인 중...")
                 if current_time - self.last_slack_time >= 1080000:
